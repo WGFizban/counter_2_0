@@ -120,16 +120,22 @@ abstract class _MainStore with Store {
           title: Text('Czyszczenie zawartości'),
           content: Text(
               'Czy chcesz wyczyścić całą zawartość? Tej operacji nie można cofnąć.',
-              style: TextStyle(fontSize: 15, color: Colors.red)),
+              style: TextStyle(fontSize: 16, color: Colors.red)),
           actions: <Widget>[
             TextButton(
-              child: Text('Nie'),
+              child: Text('Nie',
+                  style: TextStyle(
+                    fontSize: 18,
+                  )),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Tak'),
+              child: Text('Tak',
+                  style: TextStyle(
+                    fontSize: 18,
+                  )),
               onPressed: () {
                 moneyData.resetAllMoneyValue();
                 refreshMoney(moneyData.totalSum);

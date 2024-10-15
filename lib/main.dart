@@ -283,7 +283,7 @@ class HomeScreen extends StatelessWidget {
                     content: Text(
                         _store.mode == EditMode.terimnalValue
                             ? 'Podaj kwotę terminala i zatwierdź ponownym kliknięciem'
-                            : "Kwota zatwierdzona",
+                            : "Terminal zatwierdzony",
                         style: TextStyle(fontSize: 20, color: Colors.green)),
                     duration: snackDuration,
                   ),
@@ -323,7 +323,7 @@ class HomeScreen extends StatelessWidget {
                     content: Text(
                         _store.mode == EditMode.requestValue
                             ? 'Podaj kwotę zadaną i zatwierdź ponownym kliknięciem'
-                            : "Kwota zatwierdzona",
+                            : "Zada zatwierdzona",
                         style: TextStyle(fontSize: 20, color: Colors.green)),
                     duration: snackDuration,
                   ),
@@ -483,10 +483,13 @@ class HomeScreen extends StatelessWidget {
       child: IconButton(
           icon: Icon(Icons.calculate, size: 28),
           onPressed: () {
-            _store.selectedValueIndex = null;
-            _store.mode = _store.mode == EditMode.calculator
-                ? EditMode.money
-                : EditMode.calculator;
+            if (_store.checkActualMode(context, EditMode.requestValue) &&
+                _store.checkActualMode(context, EditMode.terimnalValue)) {
+              _store.selectedValueIndex = null;
+              _store.mode = _store.mode == EditMode.calculator
+                  ? EditMode.money
+                  : EditMode.calculator;
+            }
           }),
     );
   }
