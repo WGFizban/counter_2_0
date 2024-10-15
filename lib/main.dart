@@ -66,10 +66,10 @@ class HomeScreen extends StatelessWidget {
                     screenField(context),
                     Spacer(),
                     Visibility(
-                        visible: _store.mode == EditMode.calulator,
+                        visible: _store.mode == EditMode.calculator,
                         child: calculatorField()),
                     Visibility(
-                      visible: _store.mode != EditMode.calulator,
+                      visible: _store.mode != EditMode.calculator,
                       child: Column(
                         children: [
                           requestedValueField(),
@@ -111,21 +111,27 @@ class HomeScreen extends StatelessWidget {
               ...[4, 5, 6].map((nb) => _buildNumberButton(context, nb)),
               Visibility(
                   visible: _store.mode == EditMode.money,
-                  replacement: _buildIconButton(context, Icons.add, () {
-                    var text = _store.calculatorValueController.text;
-                    if (text.isNotEmpty && text[text.length - 1] != '+') {
-                      _store.calculatorValueController.text += '+';
-                      _store.setCalulatorSum();
-                    }
-                  }),
+                  replacement: Visibility(
+                    visible: _store.mode == EditMode.calculator,
+                    child: _buildIconButton(context, Icons.add, () {
+                      var text = _store.calculatorValueController.text;
+                      if (text.isNotEmpty && text[text.length - 1] != '+') {
+                        _store.calculatorValueController.text += '+';
+                        _store.setCalulatorSum();
+                      }
+                    }),
+                  ),
                   child: _buildIconButton(
                       context, Icons.arrow_upward, _store.selectPreviousValue)),
               ...[7, 8, 9].map((nb) => _buildNumberButton(context, nb)),
               Visibility(
                 visible: _store.mode == EditMode.money,
-                replacement: _buildIconButton(context, Icons.point_of_sale, () {
-                  _store.showSetupTerminalDialog(context);
-                }, color: Colors.greenAccent),
+                replacement: Visibility(
+                  visible: _store.mode == EditMode.calculator,
+                  child: _buildIconButton(context, Icons.point_of_sale, () {
+                    _store.showSetupTerminalDialog(context);
+                  }, color: Colors.greenAccent),
+                ),
                 child: _buildIconButton(
                     context, Icons.arrow_downward, _store.selectNextValue),
               ),
@@ -266,7 +272,7 @@ class HomeScreen extends StatelessWidget {
                 border: OutlineInputBorder(),
                 suffixText: "PLN"),
             readOnly: true,
-            enabled: _store.mode != EditMode.calulator,
+            enabled: _store.mode != EditMode.calculator,
             canRequestFocus: false,
             onTap: () {
               if (_store.checkActualMode(context, EditMode.requestValue)) {
@@ -308,7 +314,7 @@ class HomeScreen extends StatelessWidget {
                 suffixText: "PLN"),
             canRequestFocus: false,
             readOnly: true,
-            enabled: _store.mode != EditMode.calulator,
+            enabled: _store.mode != EditMode.calculator,
             onTap: () {
               if (_store.checkActualMode(context, EditMode.terimnalValue)) {
                 _store.toggleRequestedValueEdited();
@@ -347,7 +353,7 @@ class HomeScreen extends StatelessWidget {
                 if (!_store.requestedValueController.text.contains('.')) {
                   _store.requestedValueController.text += '.';
                 }
-              case EditMode.calulator:
+              case EditMode.calculator:
                 var text = _store.calculatorValueController.text;
                 if (text.isNotEmpty && !text.split("+").last.contains(".")) {
                   _store.calculatorValueController.text += '.';
@@ -373,7 +379,7 @@ class HomeScreen extends StatelessWidget {
                 _store.requestedValueController, number);
             break;
 
-          case EditMode.calulator:
+          case EditMode.calculator:
             _store.setupControllerValue(
                 _store.calculatorValueController, number);
             _store.setCalulatorSum();
@@ -429,7 +435,7 @@ class HomeScreen extends StatelessWidget {
                 }
                 break;
 
-              case EditMode.calulator:
+              case EditMode.calculator:
                 if (_store.calculatorValueController.text.isNotEmpty) {
                   _store.calculatorValueController.text =
                       _store.calculatorValueController.text.substring(
@@ -457,7 +463,7 @@ class HomeScreen extends StatelessWidget {
                 }
                 break;
 
-              case EditMode.calulator:
+              case EditMode.calculator:
                 if (_store.calculatorValueController.text.isNotEmpty) {
                   _store.calculatorValueController.text = "";
                   _store.calculatorSum = 0.0;
@@ -477,9 +483,10 @@ class HomeScreen extends StatelessWidget {
       child: IconButton(
           icon: Icon(Icons.calculate, size: 28),
           onPressed: () {
-            _store.mode = _store.mode == EditMode.calulator
+            _store.selectedValueIndex = null;
+            _store.mode = _store.mode == EditMode.calculator
                 ? EditMode.money
-                : EditMode.calulator;
+                : EditMode.calculator;
           }),
     );
   }
@@ -503,7 +510,8 @@ class HomeScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (_store.checkActualMode(context, EditMode.requestValue) &&
-            _store.checkActualMode(context, EditMode.terimnalValue)) {
+            _store.checkActualMode(context, EditMode.terimnalValue) &&
+            _store.mode != EditMode.calculator) {
           if (_store.selectedValueIndex == index) {
             _store.selectedValueIndex = null;
           } else {

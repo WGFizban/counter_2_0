@@ -154,6 +154,17 @@ mixin _$MainStore on _MainStore, Store {
   }
 
   @override
+  void setCalulatorSum() {
+    final _$actionInfo = _$_MainStoreActionController.startAction(
+        name: '_MainStore.setCalulatorSum');
+    try {
+      return super.setCalulatorSum();
+    } finally {
+      _$_MainStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void toggleTerminalValueEdited() {
     final _$actionInfo = _$_MainStoreActionController.startAction(
         name: '_MainStore.toggleTerminalValueEdited');

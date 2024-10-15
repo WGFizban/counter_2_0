@@ -154,25 +154,34 @@ abstract class _MainStore with Store {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Ustawianie terminala'),
-          content: Text('Czy chcesz ustawić terminal na obliczoną sumę?',
-              style: TextStyle(fontSize: 15, color: Colors.red)),
+          title: Text('Szybkie ustawianie'),
+          content: Text('Ustaw obliczoną sumę jako:',
+              style: TextStyle(fontSize: 20)),
           actions: <Widget>[
             TextButton(
-              child: Text('Nie'),
+              child: Text('Anuluj', style: TextStyle(fontSize: 18)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Tak'),
+              child: Text('Zadana', style: TextStyle(fontSize: 18)),
               onPressed: () {
-                terimnalController.text = calculatorSum.toStringAsFixed(2);
-                terminalAmount = calculatorSum;
+                requestedValueController.text =
+                    calculatorSum.toStringAsFixed(2);
+                requestedAmount = calculatorSum;
                 mode = EditMode.money;
                 Navigator.of(context).pop();
               },
             ),
+            TextButton(
+                child: Text('Terminal', style: TextStyle(fontSize: 18)),
+                onPressed: () {
+                  terimnalController.text = calculatorSum.toStringAsFixed(2);
+                  terminalAmount = calculatorSum;
+                  mode = EditMode.money;
+                  Navigator.of(context).pop();
+                }),
           ],
         );
       },
