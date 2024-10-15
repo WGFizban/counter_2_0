@@ -416,7 +416,7 @@ class HomeScreen extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         child: InkWell(
-          child: Icon(Icons.backspace, size: 28),
+          child: Icon(Icons.backspace_outlined, size: 28),
           onTap: () {
             switch (_store.mode) {
               case EditMode.terimnalValue:
