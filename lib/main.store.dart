@@ -81,10 +81,12 @@ abstract class _MainStore with Store {
 
       for (var part in parts) {
         if (part.isNotEmpty) {
-          sum += double.parse(part);
+          sum += double.tryParse(part) ?? 0.0;
         }
       }
       calculatorSum = sum;
+    } else {
+      calculatorSum = 0.0;
     }
   }
 
@@ -146,6 +148,7 @@ abstract class _MainStore with Store {
                 terimnalController.clear();
                 requestedValueController.clear();
                 selectedValueIndex = null;
+                mode = EditMode.money;
                 Navigator.of(context).pop();
               },
             ),
@@ -226,6 +229,28 @@ abstract class _MainStore with Store {
       final parts = newText.split(".");
       final fractionDigits = parts.length > 1 ? parts[1].length : 0;
       return fractionDigits <= maxFractionDigits;
+    }
+  }
+
+  Color setFieldColor(double totalAmount) {
+    switch (totalAmount) {
+      case > 0:
+        return Colors.green;
+      case < 0:
+        return Colors.red;
+      default:
+        return Colors.blue;
+    }
+  }
+
+  String setFieldInfo(double totalAmount) {
+    switch (totalAmount) {
+      case > 0:
+        return "SUPERATA";
+      case < 0:
+        return "BRAK";
+      default:
+        return "ZGODNY";
     }
   }
 

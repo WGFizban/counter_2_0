@@ -170,14 +170,16 @@ class HomeScreen extends StatelessWidget {
         builder: (context) => Container(
               padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
-                  color: setFieldColor(_store.totalAmount).withAlpha(100),
+                  color:
+                      _store.setFieldColor(_store.totalAmount).withAlpha(100),
                   border: Border.all(
-                      color: setFieldColor(_store.totalAmount), width: 3)),
+                      color: _store.setFieldColor(_store.totalAmount),
+                      width: 3)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'SUMA: ${_store.totalAmount.toStringAsFixed(2)} PLN\nSTAN: ${setFieldInfo(_store.totalAmount)}',
+                    'SUMA: ${_store.totalAmount.toStringAsFixed(2)} PLN\nSTAN: ${_store.setFieldInfo(_store.totalAmount)}',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.left,
                   )
@@ -397,7 +399,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildClearButton(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withAlpha(80),
+        color: Colors.red.withAlpha(220),
         shape: BoxShape.circle,
       ),
       child: IconButton(
@@ -477,7 +479,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildCalculatoreButton(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withAlpha(80),
+        color: Colors.blue.withAlpha(80),
         shape: BoxShape.circle,
       ),
       child: IconButton(
@@ -547,27 +549,5 @@ class HomeScreen extends StatelessWidget {
                 ),
               )),
     );
-  }
-
-  Color setFieldColor(double totalAmount) {
-    switch (totalAmount) {
-      case > 0:
-        return Colors.green;
-      case < 0:
-        return Colors.red;
-      default:
-        return Colors.blue;
-    }
-  }
-
-  String setFieldInfo(double totalAmount) {
-    switch (totalAmount) {
-      case > 0:
-        return "SUPERATA";
-      case < 0:
-        return "BRAK";
-      default:
-        return "ZGODNY";
-    }
   }
 }
