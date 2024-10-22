@@ -234,9 +234,9 @@ abstract class _MainStore with Store {
 
   Color setFieldColor(double totalAmount) {
     switch (totalAmount) {
-      case > 0:
+      case > 0.00:
         return Colors.green;
-      case < 0:
+      case < 0.00:
         return Colors.red;
       default:
         return Colors.blue;
@@ -245,9 +245,9 @@ abstract class _MainStore with Store {
 
   String setFieldInfo(double totalAmount) {
     switch (totalAmount) {
-      case > 0:
+      case > 0.00:
         return "SUPERATA";
-      case < 0:
+      case < 0.00:
         return "BRAK";
       default:
         return "ZGODNY";
