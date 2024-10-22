@@ -233,7 +233,7 @@ abstract class _MainStore with Store {
   }
 
   Color setFieldColor(double totalAmount) {
-    switch (totalAmount) {
+    switch (double.parse(totalAmount.toStringAsFixed(2))) {
       case > 0.00:
         return Colors.green;
       case < 0.00:
@@ -244,7 +244,7 @@ abstract class _MainStore with Store {
   }
 
   String setFieldInfo(double totalAmount) {
-    switch (totalAmount) {
+    switch (double.parse(totalAmount.toStringAsFixed(2))) {
       case > 0.00:
         return "SUPERATA";
       case < 0.00:
