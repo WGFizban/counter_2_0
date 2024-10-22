@@ -81,14 +81,26 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Visibility(
                         visible: orientation == Orientation.portrait,
-                        child: numpad(context)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: numpad(context),
+                        )),
                   ],
                 );
               }),
             ),
             Visibility(
                 visible: orientation == Orientation.landscape,
-                child: Expanded(child: Center(child: numpad(context))))
+                child: Expanded(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
+                      child: numpad(context),
+                    )
+                  ],
+                )))
           ],
         ),
       ),
@@ -102,8 +114,8 @@ class HomeScreen extends StatelessWidget {
           color: Colors.white,
           child: GridView.count(
             crossAxisCount: 4,
-            mainAxisSpacing: 8.0,
-            crossAxisSpacing: 8.0,
+            mainAxisSpacing: 5.0,
+            crossAxisSpacing: 5.0,
             shrinkWrap: true,
             children: [
               ...[1, 2, 3].map((nb) => _buildNumberButton(context, nb)),
@@ -343,72 +355,79 @@ class HomeScreen extends StatelessWidget {
     return Observer(builder: (context) {
       return Visibility(
         visible: _store.mode != EditMode.money,
-        child: ElevatedButton(
-          onPressed: () {
-            switch (_store.mode) {
-              case EditMode.terimnalValue:
-                if (!_store.terimnalController.text.contains('.')) {
-                  _store.terimnalController.text += '.';
-                }
-                break;
-              case EditMode.requestValue:
-                if (!_store.requestedValueController.text.contains('.')) {
-                  _store.requestedValueController.text += '.';
-                }
-              case EditMode.calculator:
-                var text = _store.calculatorValueController.text;
-                if (text.isNotEmpty && !text.split("+").last.contains(".")) {
-                  _store.calculatorValueController.text += '.';
-                }
-            }
-          },
-          child: Text('.', style: TextStyle(fontSize: 24)),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary.withAlpha(80),
+            shape: BoxShape.circle,
+          ),
+          child: InkWell(
+            child: Center(child: Text('.', style: TextStyle(fontSize: 24))),
+            onTap: () {
+              switch (_store.mode) {
+                case EditMode.terimnalValue:
+                  if (!_store.terimnalController.text.contains('.')) {
+                    _store.terimnalController.text += '.';
+                  }
+                case EditMode.requestValue:
+                  if (!_store.requestedValueController.text.contains('.')) {
+                    _store.requestedValueController.text += '.';
+                  }
+                case EditMode.calculator:
+                  var text = _store.calculatorValueController.text;
+                  if (text.isNotEmpty && !text.split("+").last.contains(".")) {
+                    _store.calculatorValueController.text += '.';
+                  }
+              }
+            },
+          ),
         ),
       );
     });
   }
 
   Widget _buildNumberButton(BuildContext context, int number) {
-    return ElevatedButton(
-      onPressed: () {
-        switch (_store.mode) {
-          case EditMode.terimnalValue:
-            _store.setupControllerValue(_store.terimnalController, number);
-            break;
+    return Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary.withAlpha(80),
+          shape: BoxShape.circle,
+        ),
+        child: InkWell(
+          child: Center(child: Text('$number', style: TextStyle(fontSize: 24))),
+          onTap: () {
+            switch (_store.mode) {
+              case EditMode.terimnalValue:
+                _store.setupControllerValue(_store.terimnalController, number);
 
-          case EditMode.requestValue:
-            _store.setupControllerValue(
-                _store.requestedValueController, number);
-            break;
+              case EditMode.requestValue:
+                _store.setupControllerValue(
+                    _store.requestedValueController, number);
 
-          case EditMode.calculator:
-            _store.setupControllerValue(
-                _store.calculatorValueController, number);
-            _store.setCalulatorSum();
-            break;
+              case EditMode.calculator:
+                _store.setupControllerValue(
+                    _store.calculatorValueController, number);
+                _store.setCalulatorSum();
 
-          default:
-            _store.moneyData.updateQuantity(number, _store.selectedValueIndex);
-            _store.refreshMoney(_store.moneyData.totalSum);
-        }
-      },
-      child: Text('$number', style: TextStyle(fontSize: 24)),
-    );
+              default:
+                _store.moneyData
+                    .updateQuantity(number, _store.selectedValueIndex);
+                _store.refreshMoney(_store.moneyData.totalSum);
+            }
+          },
+        ));
   }
 
   Widget _buildClearButton(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.red.withAlpha(220),
-        shape: BoxShape.circle,
-      ),
-      child: IconButton(
-        icon: Icon(Icons.refresh, size: 28),
-        onPressed: () {
-          _store.showClearConfirmationDialog(context);
-        },
-      ),
-    );
+        decoration: BoxDecoration(
+          color: Colors.red.withAlpha(220),
+          shape: BoxShape.circle,
+        ),
+        child: InkWell(
+          child: Center(child: Icon(Icons.refresh, size: 28)),
+          onTap: () {
+            _store.showClearConfirmationDialog(context);
+          },
+        ));
   }
 
   Widget _buildBackspaceButton(BuildContext context) {
@@ -427,7 +446,6 @@ class HomeScreen extends StatelessWidget {
                       .terimnalController.text
                       .substring(0, _store.terimnalController.text.length - 1);
                 }
-                break;
 
               case EditMode.requestValue:
                 if (_store.requestedValueController.text.isNotEmpty) {
@@ -435,7 +453,6 @@ class HomeScreen extends StatelessWidget {
                       _store.requestedValueController.text.substring(
                           0, _store.requestedValueController.text.length - 1);
                 }
-                break;
 
               case EditMode.calculator:
                 if (_store.calculatorValueController.text.isNotEmpty) {
@@ -444,7 +461,6 @@ class HomeScreen extends StatelessWidget {
                           0, _store.calculatorValueController.text.length - 1);
                 }
                 _store.setCalulatorSum();
-                break;
 
               default:
                 _store.moneyData.removeLastDigit(_store.selectedValueIndex);
@@ -457,20 +473,17 @@ class HomeScreen extends StatelessWidget {
                 if (_store.terimnalController.text.isNotEmpty) {
                   _store.terimnalController.text = "";
                 }
-                break;
 
               case EditMode.requestValue:
                 if (_store.requestedValueController.text.isNotEmpty) {
                   _store.requestedValueController.text = "";
                 }
-                break;
 
               case EditMode.calculator:
                 if (_store.calculatorValueController.text.isNotEmpty) {
                   _store.calculatorValueController.text = "";
                   _store.calculatorSum = 0.0;
                 }
-                break;
             }
           },
         ));
@@ -482,9 +495,9 @@ class HomeScreen extends StatelessWidget {
         color: Colors.blue.withAlpha(80),
         shape: BoxShape.circle,
       ),
-      child: IconButton(
-          icon: Icon(Icons.calculate, size: 28),
-          onPressed: () {
+      child: InkWell(
+          child: Center(child: Icon(Icons.calculate, size: 28)),
+          onTap: () {
             if (_store.checkActualMode(context, EditMode.requestValue) &&
                 _store.checkActualMode(context, EditMode.terimnalValue)) {
               _store.selectedValueIndex = null;
@@ -499,15 +512,12 @@ class HomeScreen extends StatelessWidget {
   Widget _buildIconButton(BuildContext context, IconData icon, Function action,
       {Color? color}) {
     return Container(
-      decoration: BoxDecoration(
-        color: color ?? Theme.of(context).colorScheme.primary.withAlpha(80),
-        shape: BoxShape.circle,
-      ),
-      child: IconButton(
-        icon: Icon(icon, size: 28),
-        onPressed: () => action(),
-      ),
-    );
+        decoration: BoxDecoration(
+          color: color ?? Theme.of(context).colorScheme.primary.withAlpha(80),
+          shape: BoxShape.circle,
+        ),
+        child: InkWell(
+            child: Center(child: Icon(icon, size: 28)), onTap: () => action()));
   }
 
   Widget _moneyValueItem(
