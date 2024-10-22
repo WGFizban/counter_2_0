@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 class MoneyData {
   List<Map<String, dynamic>> moneyValues = [
     {'value': 500, 'quantity': 0},
@@ -37,9 +39,13 @@ class MoneyData {
     ];
   }
 
-  double get totalSum {
+  Decimal get totalSum {
     return moneyValues.fold(
-        0.0, (sum, item) => sum + item['value'] * item['quantity']);
+        Decimal.zero,
+        (sum, item) =>
+            sum +
+            Decimal.parse(item['value'].toString()) *
+                Decimal.fromInt(item['quantity']));
   }
 
   void updateQuantity(int number, int? index) {

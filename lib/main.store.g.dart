@@ -9,11 +9,11 @@ part of 'main.store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MainStore on _MainStore, Store {
-  Computed<double>? _$totalAmountComputed;
+  Computed<Decimal>? _$totalAmountComputed;
 
   @override
-  double get totalAmount =>
-      (_$totalAmountComputed ??= Computed<double>(() => super.totalAmount,
+  Decimal get totalAmount =>
+      (_$totalAmountComputed ??= Computed<Decimal>(() => super.totalAmount,
               name: '_MainStore.totalAmount'))
           .value;
 
@@ -21,13 +21,13 @@ mixin _$MainStore on _MainStore, Store {
       Atom(name: '_MainStore.terminalAmount', context: context);
 
   @override
-  double get terminalAmount {
+  Decimal get terminalAmount {
     _$terminalAmountAtom.reportRead();
     return super.terminalAmount;
   }
 
   @override
-  set terminalAmount(double value) {
+  set terminalAmount(Decimal value) {
     _$terminalAmountAtom.reportWrite(value, super.terminalAmount, () {
       super.terminalAmount = value;
     });
@@ -37,13 +37,13 @@ mixin _$MainStore on _MainStore, Store {
       Atom(name: '_MainStore.requestedAmount', context: context);
 
   @override
-  double get requestedAmount {
+  Decimal get requestedAmount {
     _$requestedAmountAtom.reportRead();
     return super.requestedAmount;
   }
 
   @override
-  set requestedAmount(double value) {
+  set requestedAmount(Decimal value) {
     _$requestedAmountAtom.reportWrite(value, super.requestedAmount, () {
       super.requestedAmount = value;
     });
@@ -53,13 +53,13 @@ mixin _$MainStore on _MainStore, Store {
       Atom(name: '_MainStore.moneyAmount', context: context);
 
   @override
-  double get moneyAmount {
+  Decimal get moneyAmount {
     _$moneyAmountAtom.reportRead();
     return super.moneyAmount;
   }
 
   @override
-  set moneyAmount(double value) {
+  set moneyAmount(Decimal value) {
     _$moneyAmountAtom.reportWrite(value, super.moneyAmount, () {
       super.moneyAmount = value;
     });
@@ -116,13 +116,13 @@ mixin _$MainStore on _MainStore, Store {
       Atom(name: '_MainStore.calculatorSum', context: context);
 
   @override
-  double get calculatorSum {
+  Decimal get calculatorSum {
     _$calculatorSumAtom.reportRead();
     return super.calculatorSum;
   }
 
   @override
-  set calculatorSum(double value) {
+  set calculatorSum(Decimal value) {
     _$calculatorSumAtom.reportWrite(value, super.calculatorSum, () {
       super.calculatorSum = value;
     });
@@ -132,7 +132,7 @@ mixin _$MainStore on _MainStore, Store {
       ActionController(name: '_MainStore', context: context);
 
   @override
-  void refreshMoney(double newSum) {
+  void refreshMoney(Decimal newSum) {
     final _$actionInfo = _$_MainStoreActionController.startAction(
         name: '_MainStore.refreshMoney');
     try {

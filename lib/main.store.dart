@@ -1,5 +1,6 @@
 import 'package:counter_2_0/constant.dart';
 import 'package:counter_2_0/monye_class.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 part 'main.store.g.dart';
@@ -8,13 +9,13 @@ class MainStore = _MainStore with _$MainStore;
 
 abstract class _MainStore with Store {
   @observable
-  double terminalAmount = 0.0;
+  Decimal terminalAmount = Decimal.zero;
 
   @observable
-  double requestedAmount = 0.0;
+  Decimal requestedAmount = Decimal.zero;
 
   @observable
-  double moneyAmount = 0.0;
+  Decimal moneyAmount = Decimal.zero;
 
   @observable
   int? selectedValueIndex;
@@ -29,7 +30,7 @@ abstract class _MainStore with Store {
   MoneyData moneyData = MoneyData();
 
   @computed
-  double get totalAmount => (terminalAmount + moneyAmount) - requestedAmount;
+  Decimal get totalAmount => (terminalAmount + moneyAmount) - requestedAmount;
 
   TextEditingController terimnalController = TextEditingController();
   TextEditingController requestedValueController = TextEditingController();
@@ -37,7 +38,7 @@ abstract class _MainStore with Store {
       TextEditingController(text: "");
 
   @observable
-  double calculatorSum = 0.0;
+  Decimal calculatorSum = Decimal.zero;
 
   void init(BuildContext context) {
     moneyValues = ObservableList.of(moneyData.moneyValues);
@@ -57,7 +58,7 @@ abstract class _MainStore with Store {
   }
 
   @action
-  void refreshMoney(double newSum) {
+  void refreshMoney(Decimal newSum) {
     moneyAmount = newSum;
     moneyValues = ObservableList.of(moneyData.moneyValues);
   }
@@ -66,8 +67,8 @@ abstract class _MainStore with Store {
   void setupTerminalValue() {
     if (mode == EditMode.money) {
       terimnalController.text.isNotEmpty
-          ? terminalAmount = double.parse(terimnalController.text)
-          : terminalAmount = 0.0;
+          ? terminalAmount = Decimal.parse(terimnalController.text)
+          : terminalAmount = Decimal.zero;
       terimnalController.text = terminalAmount.toStringAsFixed(2);
     }
   }
@@ -77,16 +78,16 @@ abstract class _MainStore with Store {
     if (calculatorValueController.text.isNotEmpty) {
       var text = calculatorValueController.text;
       final parts = text.split("+");
-      double sum = 0.0;
+      Decimal sum = Decimal.zero;
 
       for (var part in parts) {
         if (part.isNotEmpty) {
-          sum += double.tryParse(part) ?? 0.0;
+          sum += Decimal.tryParse(part) ?? Decimal.zero;
         }
       }
       calculatorSum = sum;
     } else {
-      calculatorSum = 0.0;
+      calculatorSum = Decimal.zero;
     }
   }
 
@@ -101,8 +102,8 @@ abstract class _MainStore with Store {
   void setupRequestedValue() {
     if (mode == EditMode.money) {
       requestedValueController.text.isNotEmpty
-          ? requestedAmount = double.parse(requestedValueController.text)
-          : requestedAmount = 0.0;
+          ? requestedAmount = Decimal.parse(requestedValueController.text)
+          : requestedAmount = Decimal.zero;
 
       requestedValueController.text = requestedAmount.toStringAsFixed(2);
     }
@@ -141,9 +142,9 @@ abstract class _MainStore with Store {
               onPressed: () {
                 moneyData.resetAllMoneyValue();
                 refreshMoney(moneyData.totalSum);
-                terminalAmount = 0.0;
-                requestedAmount = 0.0;
-                calculatorSum = 0.0;
+                terminalAmount = Decimal.zero;
+                requestedAmount = Decimal.zero;
+                calculatorSum = Decimal.zero;
                 calculatorValueController.clear();
                 terimnalController.clear();
                 requestedValueController.clear();
@@ -232,25 +233,23 @@ abstract class _MainStore with Store {
     }
   }
 
-  Color setFieldColor(double totalAmount) {
-    switch (double.parse(totalAmount.toStringAsFixed(2))) {
-      case > 0.00:
-        return Colors.green;
-      case < 0.00:
-        return Colors.red;
-      default:
-        return Colors.blue;
+  Color setFieldColor(Decimal totalAmount) {
+    if (totalAmount > Decimal.zero) {
+      return Colors.green;
+    } else if (totalAmount < Decimal.zero) {
+      return Colors.red;
+    } else {
+      return Colors.blue;
     }
   }
 
-  String setFieldInfo(double totalAmount) {
-    switch (double.parse(totalAmount.toStringAsFixed(2))) {
-      case > 0.00:
-        return "SUPERATA";
-      case < 0.00:
-        return "BRAK";
-      default:
-        return "ZGODNY";
+  String setFieldInfo(Decimal totalAmount) {
+    if (totalAmount > Decimal.zero) {
+      return "SUPERATA";
+    } else if (totalAmount < Decimal.zero) {
+      return "BRAK";
+    } else {
+      return "ZGODNY";
     }
   }
 

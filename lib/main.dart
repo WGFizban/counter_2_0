@@ -1,5 +1,6 @@
 import 'package:counter_2_0/constant.dart';
 import 'package:counter_2_0/main.store.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -280,7 +281,7 @@ class HomeScreen extends StatelessWidget {
           child: TextField(
             controller: _store.terimnalController,
             decoration: InputDecoration(
-                labelText: _store.terminalAmount > 0.0
+                labelText: _store.terminalAmount > Decimal.zero
                     ? "Kwota terminala ${_store.mode == EditMode.terimnalValue ? "- edycja" : ""}"
                     : 'Terminal - kliknij by ustawić',
                 border: OutlineInputBorder(),
@@ -321,7 +322,7 @@ class HomeScreen extends StatelessWidget {
           child: TextField(
             controller: _store.requestedValueController,
             decoration: InputDecoration(
-                labelText: _store.requestedAmount > 0.0
+                labelText: _store.requestedAmount > Decimal.zero
                     ? "Kwota zadana ${_store.mode == EditMode.requestValue ? "- edycja" : ""}"
                     : 'Zadana - kliknij by ustawić',
                 border: OutlineInputBorder(),
@@ -482,7 +483,7 @@ class HomeScreen extends StatelessWidget {
               case EditMode.calculator:
                 if (_store.calculatorValueController.text.isNotEmpty) {
                   _store.calculatorValueController.text = "";
-                  _store.calculatorSum = 0.0;
+                  _store.calculatorSum = Decimal.zero;
                 }
             }
           },
