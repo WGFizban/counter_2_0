@@ -1,12 +1,12 @@
 {
-    "name": "Counter_3_0",
-    "short_name": "Counter_3_0",
+    "name": "Rozliczenia 3.0",
+    "short_name": "Rozliczenia 3.0",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
     "description": "Projekt do rozliczen.",
-    "orientation": "portrait-primary",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {
